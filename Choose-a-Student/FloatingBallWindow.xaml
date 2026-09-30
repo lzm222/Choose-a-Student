@@ -10,11 +10,31 @@
         Topmost="True"
         WindowStartupLocation="Manual"
         MouseLeftButtonDown="Window_MouseLeftButtonDown">
-    <Border Background="#FF3A7BD5" BorderBrush="#FF1F4E8C" BorderThickness="1">
-        <TextBlock Text="点名"
-                   Foreground="White"
-                   FontSize="14"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center" />
+    <Border BorderBrush="#FF1F4E8C" BorderThickness="1">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Background="#FF3A7BD5">
+                <TextBlock Text="点名"
+                           Foreground="White"
+                           FontSize="12"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
+            </Border>
+
+            <Border Grid.Column="1"
+                    Background="#FF2C5FA8"
+                    BorderBrush="White"
+                    BorderThickness="1,0,0,0">
+                <TextBlock Text="拖动"
+                           Foreground="White"
+                           FontSize="12"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
+            </Border>
+        </Grid>
     </Border>
 </Window>
