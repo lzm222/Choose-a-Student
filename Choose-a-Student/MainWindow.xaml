@@ -5,8 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Choose_a_Student"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="课堂点名"
+        Height="220" Width="480"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
+        <Button x:Name="SelectFileButton"
+                Content="选择名单文件"
+                Width="140" Padding="8,4"
+                HorizontalAlignment="Left"
+                Click="SelectFileButton_Click" />
+
+        <StackPanel Grid.Row="1" Margin="0,12,0,0">
+            <TextBlock x:Name="FilePathText"
+                       Text="名单文件：未选择"
+                       TextWrapping="Wrap" />
+            <TextBlock x:Name="CountText"
+                       Text="人数：0"
+                       Margin="0,4,0,0" />
+        </StackPanel>
+
+        <CheckBox x:Name="ShowBallCheckBox"
+                  Grid.Row="2"
+                  Margin="0,12,0,0"
+                  Content="显示悬浮球"
+                  Checked="ShowBallCheckBox_Changed"
+                  Unchecked="ShowBallCheckBox_Changed" />
     </Grid>
 </Window>
