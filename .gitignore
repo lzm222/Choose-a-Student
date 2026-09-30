@@ -1,0 +1,7 @@
+## .NET / WPF build artifacts
+bin/
+obj/
+
+## Visual Studio
+.vs/
+*.user
