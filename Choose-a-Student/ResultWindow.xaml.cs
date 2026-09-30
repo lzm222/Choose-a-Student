@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 
@@ -33,13 +32,6 @@ namespace Choose_a_Student
             {
                 Hide();
             }
-        }
-
-        /// <summary>点击关闭按钮时只隐藏，保持实例可复用。</summary>
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            e.Cancel = true;
-            Hide();
         }
     }
 }
