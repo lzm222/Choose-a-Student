@@ -25,11 +25,6 @@ namespace Choose_a_Student
         /// <summary>初始化期间抑制控件事件回写配置。</summary>
         private bool _restoring;
 
-        public MainWindow()
-            : this(new ConfigService())
-        {
-        }
-
         public MainWindow(ConfigService configService)
         {
             _configService = configService;

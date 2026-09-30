@@ -1,6 +1,5 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
+﻿using System.Windows;
+using Choose_a_Student.Services;
 
 namespace Choose_a_Student
 {
@@ -9,6 +8,13 @@ namespace Choose_a_Student
     /// </summary>
     public partial class App : Application
     {
-    }
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
 
+            var configService = new ConfigService();
+            MainWindow = new MainWindow(configService);
+            MainWindow.Show();
+        }
+    }
 }
