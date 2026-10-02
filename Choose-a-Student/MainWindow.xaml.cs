@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Windows;
+﻿using System.Windows;
 using Microsoft.Win32;
-using Choose_a_Student.Models;
 using Choose_a_Student.Services;
 
 namespace Choose_a_Student
@@ -14,11 +10,8 @@ namespace Choose_a_Student
     public partial class MainWindow : Window
     {
         private readonly ConfigService _configService;
-        private readonly RosterService _rosterService = new();
         private readonly PickerService _pickerService = new();
-        private readonly AppConfig _config;
 
-        private List<string> _roster = new();
         private FloatingBallWindow? _floatingBall;
         private ResultWindow? _resultWindow;
 
@@ -28,7 +21,6 @@ namespace Choose_a_Student
         public MainWindow(ConfigService configService)
         {
             _configService = configService;
-            _config = configService.Load();
 
             InitializeComponent();
             RestoreState();
@@ -38,20 +30,12 @@ namespace Choose_a_Student
         {
             _restoring = true;
 
-            if (_rosterService.IsValid(_config.RosterFilePath))
-            {
-                _roster = _rosterService.Load(_config.RosterFilePath);
-                UpdateRosterInfo(_config.RosterFilePath);
-            }
-            else
-            {
-                UpdateRosterInfo(null);
-            }
+            UpdateRosterInfo(_configService.RosterFilePath);
 
-            ShowBallCheckBox.IsChecked = _config.ShowFloatingBall;
+            ShowBallCheckBox.IsChecked = _configService.ShowFloatingBall;
             _restoring = false;
 
-            if (_config.ShowFloatingBall)
+            if (_configService.ShowFloatingBall)
             {
                 SetFloatingBallVisible(true);
             }
@@ -73,26 +57,21 @@ namespace Choose_a_Student
 
         private void LoadRoster(string path)
         {
-            try
+            if (_configService.TrySetRosterFile(path, out string? error))
             {
-                _roster = _rosterService.Load(path);
-                _config.RosterFilePath = path;
                 UpdateRosterInfo(path);
-                _configService.Save(_config);
             }
-            catch (Exception ex)
+            else
             {
-                _roster = new List<string>();
-                UpdateRosterInfo(null);
-                MessageBox.Show(this, "读取名单失败：" + ex.Message, "错误",
+                MessageBox.Show(this, "读取名单失败：" + error, "错误",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         private void UpdateRosterInfo(string? path)
         {
-            FilePathText.Text = path is null ? "名单文件：未选择" : "名单文件：" + path;
-            CountText.Text = "人数：" + _roster.Count;
+            FilePathText.Text = string.IsNullOrEmpty(path) ? "名单文件：未选择" : "名单文件：" + path;
+            CountText.Text = "人数：" + _configService.Roster.Count;
         }
 
         private void ShowBallCheckBox_Changed(object sender, RoutedEventArgs e)
@@ -105,8 +84,7 @@ namespace Choose_a_Student
             bool show = ShowBallCheckBox.IsChecked == true;
             SetFloatingBallVisible(show);
 
-            _config.ShowFloatingBall = show;
-            _configService.Save(_config);
+            _configService.ShowFloatingBall = show;
         }
 
         private void SetFloatingBallVisible(bool visible)
@@ -132,7 +110,7 @@ namespace Choose_a_Student
 
         private void OnPickRequested()
         {
-            string? name = _pickerService.Pick(_roster);
+            string? name = _pickerService.Pick(_configService.Roster);
             if (name is null)
             {
                 MessageBox.Show(this, "名单为空，请先选择名单文件。", "提示",
