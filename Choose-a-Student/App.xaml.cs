@@ -38,7 +38,6 @@ namespace Choose_a_Student
             _floatingBall.PickRequested += OnPickRequested;
 
             _mainWindow.SetRosterInfo(_configService.RosterFilePath, _configService.Roster.Count);
-            _mainWindow.SetShowFloatingBall(_configService.ShowFloatingBall);
             ApplyFloatingBallVisibility();
 
             MainWindow = _mainWindow;
@@ -80,15 +79,19 @@ namespace Choose_a_Student
             ShowResult(name);
         }
 
-        /// <summary>按配置显示或隐藏悬浮球窗口。</summary>
+        /// <summary>按当前配置同步主窗口的悬浮球开关，并显示或隐藏悬浮球窗口。</summary>
         private void ApplyFloatingBallVisibility()
         {
+            bool show = _configService.ShowFloatingBall;
+
+            _mainWindow?.SetShowFloatingBall(show);
+
             if (_floatingBall is null)
             {
                 return;
             }
 
-            if (_configService.ShowFloatingBall)
+            if (show)
             {
                 _floatingBall.Show();
                 _floatingBall.Activate();
