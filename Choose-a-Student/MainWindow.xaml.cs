@@ -38,7 +38,7 @@ namespace Choose_a_Student
         {
             _restoring = true;
 
-            if (!string.IsNullOrEmpty(_config.RosterFilePath) && File.Exists(_config.RosterFilePath))
+            if (_rosterService.IsValid(_config.RosterFilePath))
             {
                 _roster = _rosterService.Load(_config.RosterFilePath);
                 UpdateRosterInfo(_config.RosterFilePath);
