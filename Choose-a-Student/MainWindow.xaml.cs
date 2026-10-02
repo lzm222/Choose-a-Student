@@ -28,12 +28,7 @@ namespace Choose_a_Student
 
         private void RestoreState()
         {
-            _restoring = true;
-
-            UpdateRosterInfo(_configService.RosterFilePath);
-
-            ShowBallCheckBox.IsChecked = _configService.ShowFloatingBall;
-            _restoring = false;
+            RefreshFromConfig();
 
             if (_configService.ShowFloatingBall)
             {
@@ -51,27 +46,29 @@ namespace Choose_a_Student
 
             if (dialog.ShowDialog(this) == true)
             {
-                LoadRoster(dialog.FileName);
+                if (_configService.TrySetRosterFile(dialog.FileName, out string? error))
+                {
+                    RefreshFromConfig();
+                }
+                else
+                {
+                    MessageBox.Show(this, "读取名单失败：" + error, "错误",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
-        private void LoadRoster(string path)
+        /// <summary>读取当前配置并刷新界面显示。</summary>
+        private void RefreshFromConfig()
         {
-            if (_configService.TrySetRosterFile(path, out string? error))
-            {
-                UpdateRosterInfo(path);
-            }
-            else
-            {
-                MessageBox.Show(this, "读取名单失败：" + error, "错误",
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
+            _restoring = true;
 
-        private void UpdateRosterInfo(string? path)
-        {
+            string path = _configService.RosterFilePath;
             FilePathText.Text = string.IsNullOrEmpty(path) ? "名单文件：未选择" : "名单文件：" + path;
             CountText.Text = "人数：" + _configService.Roster.Count;
+            ShowBallCheckBox.IsChecked = _configService.ShowFloatingBall;
+
+            _restoring = false;
         }
 
         private void ShowBallCheckBox_Changed(object sender, RoutedEventArgs e)
