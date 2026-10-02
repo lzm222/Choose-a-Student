@@ -23,7 +23,7 @@ namespace Choose_a_Student
         private ResultWindow? _resultWindow;
 
         /// <summary>初始化期间抑制控件事件回写配置。</summary>
-        private bool _restoring;
+        private bool _restoring = false;
 
         public MainWindow(ConfigService configService)
         {
