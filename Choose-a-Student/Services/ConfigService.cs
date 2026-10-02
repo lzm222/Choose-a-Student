@@ -12,11 +12,15 @@ namespace Choose_a_Student.Services
     /// </summary>
     public class ConfigService
     {
+        /// <summary>配置序列化选项：缩进输出，便于手工查看。</summary>
         private static readonly JsonSerializerOptions SerializerOptions = new() { WriteIndented = true };
 
         private readonly RosterService _rosterService = new();
         private readonly AppConfig _config;
 
+        /// <summary>
+        /// 构造函数：确定配置文件路径，载入配置并预载名单。
+        /// </summary>
         public ConfigService()
         {
             string dir = Path.Combine(
@@ -52,6 +56,9 @@ namespace Choose_a_Student.Services
         /// 设置名单文件：校验并加载，成功则写入配置并持久化。
         /// 失败时返回 false，并通过 <paramref name="error"/> 给出原因。
         /// </summary>
+        /// <param name="path">名单文件路径。</param>
+        /// <param name="error">失败原因；成功时为 null。</param>
+        /// <returns>加载并保存成功时返回 true，否则返回 false。</returns>
         public bool TrySetRosterFile(string path, out string? error)
         {
             try
@@ -69,6 +76,9 @@ namespace Choose_a_Student.Services
             }
         }
 
+        /// <summary>
+        /// 按已保存的名单路径预载名单；路径无效或读取失败时名单保持为空。
+        /// </summary>
         private void InitializeRoster()
         {
             if (!_rosterService.IsValid(_config.RosterFilePath))
@@ -86,6 +96,8 @@ namespace Choose_a_Student.Services
             }
         }
 
+        /// <summary>从磁盘读取配置；文件缺失或损坏时回退为默认配置。</summary>
+        /// <returns>读取到的配置，异常情况下为默认配置。</returns>
         private AppConfig LoadAppConfig()
         {
             try
@@ -104,6 +116,7 @@ namespace Choose_a_Student.Services
             }
         }
 
+        /// <summary>把当前配置写回磁盘（必要时创建目录），失败时静默忽略。</summary>
         private void Save()
         {
             try
