@@ -1,0 +1,82 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to create/release (e.g. v1.0.1). Leave empty to just build artifacts.'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore
+        run: dotnet restore Choose-a-Student.sln
+
+      - name: Build
+        run: dotnet build Choose-a-Student.sln -c Release --no-restore
+
+      - name: Publish (self-contained single-file win-x64)
+        run: >
+          dotnet publish .\Choose-a-Student\Choose-a-Student.csproj
+          -c Release
+          -r win-x64
+          --self-contained true
+          -p:PublishSingleFile=true
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -p:EnableCompressionInSingleFile=true
+          -o .\publish
+
+      - name: Show publish output
+        run: dir .\publish
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Choose-a-Student-win-x64
+          path: .\publish\Choose-a-Student.exe
+          if-no-files-found: error
+
+      - name: Determine release tag
+        id: rel
+        shell: pwsh
+        run: |
+          if ('${{ github.event_name }}' -eq 'push') {
+            $tag = '${{ github.ref_name }}'
+          } else {
+            $tag = '${{ github.event.inputs.tag }}'
+          }
+          echo "tag=$tag" >> $env:GITHUB_OUTPUT
+          if ([string]::IsNullOrWhiteSpace($tag)) {
+            echo "skip_release=true" >> $env:GITHUB_OUTPUT
+          } else {
+            echo "skip_release=false" >> $env:GITHUB_OUTPUT
+          }
+
+      - name: Create GitHub Release and upload exe
+        if: steps.rel.outputs.skip_release == 'false'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.rel.outputs.tag }}
+          name: ${{ steps.rel.outputs.tag }}
+          generate_release_notes: true
+          files: .\publish\Choose-a-Student.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
