@@ -6,35 +6,58 @@
         xmlns:local="clr-namespace:Choose_a_Student"
         mc:Ignorable="d"
         Title="课堂点名"
-        Height="220" Width="480"
+        Height="340" Width="480"
+        Background="{StaticResource PageBackgroundBrush}"
+        FontFamily="{StaticResource AppFontFamily}"
         WindowStartupLocation="CenterScreen">
-    <Grid Margin="16">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <Border Margin="24"
+            Padding="24"
+            Background="{StaticResource SurfaceBrush}"
+            CornerRadius="8">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="16" ShadowDepth="2"
+                              Direction="270" Opacity="0.16" Color="#FF000000" />
+        </Border.Effect>
 
-        <Button x:Name="SelectFileButton"
-                Content="选择名单文件"
-                Width="140" Padding="8,4"
-                HorizontalAlignment="Left"
-                Click="SelectFileButton_Click" />
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="1" Margin="0,12,0,0">
-            <TextBlock x:Name="FilePathText"
-                       Text="名单文件：未选择"
-                       TextWrapping="Wrap" />
-            <TextBlock x:Name="CountText"
-                       Text="人数：0"
-                       Margin="0,4,0,0" />
-        </StackPanel>
+            <TextBlock Text="课堂点名"
+                       FontSize="20"
+                       FontWeight="SemiBold"
+                       Foreground="{StaticResource TextPrimaryBrush}" />
 
-        <CheckBox x:Name="ShowBallCheckBox"
-                  Grid.Row="2"
-                  Margin="0,12,0,0"
-                  Content="显示悬浮球"
-                  Checked="ShowBallCheckBox_Changed"
-                  Unchecked="ShowBallCheckBox_Changed" />
-    </Grid>
+            <Button x:Name="SelectFileButton"
+                    Grid.Row="1"
+                    Margin="0,16,0,0"
+                    Content="选择名单文件"
+                    HorizontalAlignment="Left"
+                    Click="SelectFileButton_Click" />
+
+            <StackPanel Grid.Row="2" Margin="0,16,0,0">
+                <TextBlock x:Name="FilePathText"
+                           Text="名单文件：未选择"
+                           FontSize="13"
+                           Foreground="{StaticResource TextSecondaryBrush}"
+                           TextWrapping="Wrap" />
+                <TextBlock x:Name="CountText"
+                           Text="人数：0"
+                           Margin="0,4,0,0"
+                           FontSize="14"
+                           Foreground="{StaticResource TextPrimaryBrush}" />
+            </StackPanel>
+
+            <CheckBox x:Name="ShowBallCheckBox"
+                      Grid.Row="3"
+                      Margin="0,16,0,0"
+                      Content="显示悬浮球"
+                      Checked="ShowBallCheckBox_Changed"
+                      Unchecked="ShowBallCheckBox_Changed" />
+        </Grid>
+    </Border>
 </Window>
