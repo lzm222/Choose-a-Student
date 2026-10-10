@@ -33,15 +33,13 @@ jobs:
       - name: Build
         run: dotnet build Choose-a-Student.sln -c Release --no-restore
 
-      - name: Publish (self-contained single-file win-x64)
+      - name: Publish (framework-dependent single-file win-x64)
         run: >
           dotnet publish .\Choose-a-Student\Choose-a-Student.csproj
           -c Release
           -r win-x64
-          --self-contained true
+          --self-contained false
           -p:PublishSingleFile=true
-          -p:IncludeNativeLibrariesForSelfExtract=true
-          -p:EnableCompressionInSingleFile=true
           -o .\publish
 
       - name: Show publish output

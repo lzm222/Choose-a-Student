@@ -12,7 +12,8 @@
 ## 环境要求
 
 - Windows
-- [.NET 9 SDK](https://dotnet.microsoft.com/download)（目标框架 `net9.0-windows`）
+- **运行**：[.NET 9 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/9.0)（或更高大版本）。未安装时启动会弹出系统提示框，点击其中的链接即可前往下载安装。
+- **构建**：[.NET 9 SDK](https://dotnet.microsoft.com/download)
 
 ## 构建与运行
 
@@ -22,6 +23,16 @@ dotnet run --project .\Choose-a-Student\Choose-a-Student.csproj
 ```
 
 也可以直接运行构建产物：`Choose-a-Student\bin\Debug\net9.0-windows\Choose-a-Student.exe`。
+
+## 打包发布
+
+发布为单个、框架依赖的 exe（体积小、启动快，需目标机安装 .NET 9 Desktop Runtime）：
+
+```powershell
+dotnet publish .\Choose-a-Student\Choose-a-Student.csproj `
+  -c Release -r win-x64 --self-contained false `
+  -p:PublishSingleFile=true -o .\publish
+```
 
 ## 使用
 
