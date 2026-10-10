@@ -42,5 +42,4 @@ dotnet run --project .\Choose-a-Student\Choose-a-Student.csproj
 
 - 仓库已初始化（分支 `main`），远端 `git@github.com:lzm222/Choose-a-Student.git`；`.gitignore` 已忽略 `bin/`、`obj/`、`.vs/`、`*.user`。
 - commit 前缀：`feat: ` `fix: ` `refactor: ` `style: ` `docs: ` `chore: ` `test: `
-- message 尽量简短；每完成一个小功能立即提交一次。
 - `style: `前缀的提交只能在没有修改代码逻辑或功能实现的前提下使用，比如移除未使用的using、格式化代码等情况
