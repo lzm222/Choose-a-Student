@@ -52,6 +52,24 @@ namespace Choose_a_Student.Services
             }
         }
 
+        /// <summary>悬浮球左侧位置；null 表示未记录，应使用默认位置。</summary>
+        public double? FloatingBallLeft => _config.FloatingBallLeft;
+
+        /// <summary>悬浮球顶部位置；null 表示未记录，应使用默认位置。</summary>
+        public double? FloatingBallTop => _config.FloatingBallTop;
+
+        /// <summary>
+        /// 设置悬浮球位置：记录左、上坐标并一次性持久化。
+        /// </summary>
+        /// <param name="left">悬浮球左侧位置。</param>
+        /// <param name="top">悬浮球顶部位置。</param>
+        public void SetFloatingBallPosition(double left, double top)
+        {
+            _config.FloatingBallLeft = left;
+            _config.FloatingBallTop = top;
+            Save();
+        }
+
         /// <summary>
         /// 设置名单文件：校验并加载，成功则写入配置并持久化。
         /// 失败时返回 false，并通过 <paramref name="error"/> 给出原因。

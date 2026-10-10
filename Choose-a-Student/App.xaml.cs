@@ -36,6 +36,9 @@ namespace Choose_a_Student
             _mainWindow.RosterFileSelected += OnRosterFileSelected;
             _mainWindow.ShowFloatingBallToggled += OnShowFloatingBallToggled;
             _floatingBall.PickRequested += OnPickRequested;
+            _floatingBall.PositionChanged += OnFloatingBallPositionChanged;
+
+            _floatingBall.RestorePosition(_configService.FloatingBallLeft, _configService.FloatingBallTop);
 
             _mainWindow.SetRosterInfo(_configService.RosterFilePath, _configService.Roster.Count);
             ApplyFloatingBallVisibility();
@@ -64,6 +67,14 @@ namespace Choose_a_Student
         {
             _configService.ShowFloatingBall = show;
             ApplyFloatingBallVisibility();
+        }
+
+        /// <summary>响应悬浮球拖动结束：把最终位置写入配置。</summary>
+        /// <param name="left">悬浮球左侧位置。</param>
+        /// <param name="top">悬浮球顶部位置。</param>
+        private void OnFloatingBallPositionChanged(double left, double top)
+        {
+            _configService.SetFloatingBallPosition(left, top);
         }
 
         /// <summary>响应悬浮球点名请求：随机取一名并显示结果，名单为空时提示。</summary>
